@@ -20,8 +20,34 @@ def check_price():
     print(title)
 
     if(price <+ 2450):
-        print('Best Price Available, Time to buy')
-        # Call send_email() Function with title param
-        # send_email(title)
+        print('Best Price Available time to buy')
+        send_email(title)
     else:
         print('Looks like this isn\'t the right time to buy')
+
+def send_email(title):
+    try:
+        server = smtplib.SMTP('smtp.mail.yahoo.com', 587)
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        server.login('Sender Mail Address Config', 'Access Key')
+
+        subject = 'Price Drop: {0}'.format(title)
+        body = 'Check the Amazon Link \n\n {0}'.format(url)
+
+        msg = 'Subject: {0}\n\n{1}'.format(subject, body)
+
+        server.sendmail(
+            'FROM',
+            'TO',
+            msg
+        )
+
+        print('Hey, Email has Been Sent!')
+        
+    except Exception as ex:
+        print('Error Sending Mail: {0}'.format(ex))
+    server.quit()
+
+check_price()
